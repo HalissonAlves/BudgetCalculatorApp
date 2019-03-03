@@ -1,20 +1,13 @@
-
 // BUDGET CONTROLLER
-var budgetController = (function() {
-
-
-
-})();
-
+var budgetController = (function() {})();
 
 // UI CONTROLLER
 var UIController = (function() {
-
     var DOMstrings = {
-        inputType: '.add__type',
-        inputDescription: '.add__description',
-        inputValue: '.add__value', 
-        inputButton: '.add__btn'
+        inputType: ".add__type",
+        inputDescription: ".add__description",
+        inputValue: ".add__value",
+        inputButton: ".add__btn"
     };
 
     return {
@@ -30,30 +23,37 @@ var UIController = (function() {
             return DOMstrings;
         }
     };
-
 })();
-
 
 // GLOBAL APP CONTROLLER
 var controller = (function(budgetCtrl, UICtrl) {
 
-    var DOM = UICtrl.getDOMstrings();
+    var setupEventListeners = function() {
+
+        var DOM = UICtrl.getDOMstrings();
+
+        document.querySelector(DOM.inputButton).addEventListener("click", ctrlAddItem);
+
+        document.addEventListener("keypress", function(event) {
+            if (event.keyCode === 13 || event.which === 13) {
+                ctrlAddItem();
+            }
+        });
+
+    };
 
     var ctrlAddItem = function() {
-        
         var input = UICtrl.getInput();
         console.log(input);
+    };
 
-    }
-
-    document.querySelector(DOM.inputButton).addEventListener('click', ctrlAddItem);
-
-    document.addEventListener('keypress', function (event) {
-
-        if (event.keyCode === 13 || event.which === 13) {
-            ctrlAddItem();
+    return {
+        init: function () {
+            console.log("Application started");
+            setupEventListeners();
         }
-
-    })
+    };
 
 })(budgetController, UIController);
+
+controller.init();
