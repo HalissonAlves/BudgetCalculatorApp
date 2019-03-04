@@ -179,6 +179,12 @@ var UIController = (function() {
 
     };
 
+    var nodeListForEach = function(list, callback) {
+        for (let index = 0; index < list.length; index++) {
+            callback(list[index], index);                    
+        }
+    };
+
     return {
         getInput: function() {
             return {
@@ -253,12 +259,6 @@ var UIController = (function() {
             
             var fields = document.querySelectorAll(DOMstrings.expensesPercLabel);
 
-            var nodeListForEach = function(list, callback) {
-                for (let index = 0; index < list.length; index++) {
-                    callback(list[index], index);                    
-                }
-            };
-
             nodeListForEach(fields, function(current, index) {
                 if(percentages[index] > 0) {
                     current.textContent = percentages[index] + "%";
@@ -284,6 +284,22 @@ var UIController = (function() {
 
         },
 
+        changedType: function() {
+
+            var fields = document.querySelectorAll(
+                DOMstrings.inputType + ", " +
+                DOMstrings.inputDescription + ", " +
+                DOMstrings.inputValue
+            );
+
+            nodeListForEach(fields, function(current) {
+                current.classList.toggle('red-focus');
+            });
+
+            document.querySelector(DOMstrings.inputButton).classList.toggle('red');
+
+        },
+
         getDOMstrings: function() {
             return DOMstrings;
         }
@@ -305,6 +321,8 @@ var controller = (function(budgetCtrl, UICtrl) {
         });
 
         document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem);
+
+        document.querySelector(DOM.inputType).addEventListener('change', UICtrl.changedType);
     };
 
     var updateBudget = function () {
